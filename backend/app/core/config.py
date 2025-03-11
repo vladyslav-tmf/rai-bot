@@ -19,11 +19,11 @@ class Settings(BaseSettings):
             return [origin.strip() for origin in origins.split(",")]
         return origins
 
-    POSTGRES_SERVER: str = "localhost"
-    POSTGRES_USER: str = "postgres"
-    POSTGRES_PASSWORD: str = "postgres"
-    POSTGRES_DB: str = "postgres"
-    POSTGRES_PORT: str = "5432"
+    POSTGRES_SERVER: str
+    POSTGRES_USER: str
+    POSTGRES_PASSWORD: str
+    POSTGRES_DB: str
+    POSTGRES_PORT: str
 
     OPENAI_API_KEY: str
 
@@ -32,6 +32,3 @@ class Settings(BaseSettings):
         env_file_encoding="utf-8",
         case_sensitive=True,
     )
-
-
-settings = Settings()

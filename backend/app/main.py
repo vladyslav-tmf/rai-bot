@@ -1,8 +1,10 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from backend.app.core.config import settings
+from backend.app.core.config import Settings
 from backend.app.routes import auth, chats, messages, users
+
+settings = Settings()
 
 app = FastAPI(
     title=settings.PROJECT_NAME, version=settings.VERSION, description="RAI Bot API"
