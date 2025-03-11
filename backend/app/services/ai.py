@@ -1,6 +1,12 @@
-from openai import (APIError, AsyncOpenAI, AuthenticationError,
-                    BadRequestError, ConflictError, NotFoundError,
-                    RateLimitError)
+from openai import (
+    APIError,
+    AsyncOpenAI,
+    AuthenticationError,
+    BadRequestError,
+    ConflictError,
+    NotFoundError,
+    RateLimitError,
+)
 from openai.types.chat import ChatCompletion
 
 from backend.app.core.config import Settings
