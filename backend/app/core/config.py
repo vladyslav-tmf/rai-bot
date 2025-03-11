@@ -26,6 +26,13 @@ class Settings(BaseSettings):
     POSTGRES_PORT: str
 
     OPENAI_API_KEY: str
+    OPENAI_MODEL: str = "gpt-4o-2024-08-06"
+    SYSTEM_PROMPT: str = (
+        "You are RAI Bot, a helpful AI assistant. "
+        "You provide clear, accurate, and concise responses. "
+        "If you're not sure about something, you'll admit it. "
+        "You aim to be helpful while maintaining a natural, conversational tone."
+    )
 
     model_config = SettingsConfigDict(
         env_file=".env",

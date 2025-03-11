@@ -4,16 +4,20 @@ from sqlalchemy import select
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from backend.app.core.config import Settings
 from backend.app.models.chat import Chat
 from backend.app.models.message import Message, MessageRole
 from backend.app.schemas.message import MessageCreate
+from backend.app.services.ai import AIService
 
 
 class MessageService:
     """Service for handling message-related operations."""
 
-    def __init__(self, session: AsyncSession) -> None:
+    def __init__(self, session: AsyncSession, settings: Settings) -> None:
         self.session = session
+        self.ai_service = AIService(settings)
+        self.system_prompt = settings.SYSTEM_PROMPT
 
     async def create_user_message(
         self, message_data: MessageCreate, user_id: UUID
@@ -81,3 +85,28 @@ class MessageService:
             .limit(limit)
         )
         return list(query.scalars().all())
+
+    async def get_chat_history(self, chat_id: UUID) -> list[dict[str, str]]:
+        """Get chat history formatted for AI service."""
+        query = await self.session.execute(
+            select(Message)
+            .where(Message.chat_id == chat_id)
+            .order_by(Message.created_at.asc())
+        )
+        messages = query.scalars().all()
+
+        return [
+            {
+                "content": msg.content,
+                "response": msg.content if msg.role == MessageRole.ASSISTANT else None,
+            }
+            for msg in messages
+        ]
+
+    async def get_ai_response(self, chat_id: UUID, user_message: str) -> str:
+        """Get AI response for a message."""
+        history = await self.get_chat_history(chat_id)
+        messages = self.ai_service.format_chat_history(self.system_prompt, history)
+        messages.append({"role": "user", "content": user_message})
+
+        return await self.ai_service.get_response(messages)

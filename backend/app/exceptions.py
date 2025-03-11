@@ -4,3 +4,7 @@ class UserAlreadyExistsError(Exception):
 
 class AuthenticationError(Exception):
     """Raised when authentication fails."""
+
+
+class AIServiceError(Exception):
+    """Raised when an error occurs in the AI service."""
