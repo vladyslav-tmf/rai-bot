@@ -11,10 +11,10 @@ python = "^3.12"
 fastapi = {extras = ["all"], version = "^0.115.11"}
 sqlalchemy = "^2.0.38"
 alembic = "^1.15.1"
-psycopg2-binary = "^2.9.10"
 python-jose = {extras = ["cryptography"], version = "^3.4.0"}
 passlib = {extras = ["bcrypt"], version = "^1.7.4"}
 beautifulsoup4 = "^4.13.3"
+asyncpg = "^0.30.0"
 
 
 [tool.poetry.group.dev.dependencies]
