@@ -1,11 +1,11 @@
-from fastapi import APIRouter, status, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from backend.app.core.dependencies import get_db
-from backend.app.exceptions import UserAlreadyExistsError, AuthenticationError
+from backend.app.exceptions import AuthenticationError, UserAlreadyExistsError
 from backend.app.schemas.auth import LoginData
 from backend.app.schemas.token import Token
-from backend.app.schemas.user import UserInDB, UserCreate
+from backend.app.schemas.user import UserCreate, UserInDB
 from backend.app.services.auth import AuthService
 from backend.app.services.user import UserService
 

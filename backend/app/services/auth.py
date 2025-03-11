@@ -1,6 +1,6 @@
-from datetime import datetime, UTC, timedelta
+from datetime import UTC, datetime, timedelta
 
-from jose import jwt, JWTError
+from jose import JWTError, jwt
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from backend.app.core.config import settings
