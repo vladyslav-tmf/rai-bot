@@ -5,7 +5,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
-    PROJECT_NAME: str = "RAI bot"
+    PROJECT_NAME: str = "RAI Bot"
     VERSION: str = "0.1.0"
     API_PREFIX: str = "/api/v1"
     SECRET_KEY: str = secrets.token_urlsafe(32)
@@ -24,6 +24,8 @@ class Settings(BaseSettings):
     POSTGRES_PASSWORD: str = "postgres"
     POSTGRES_DB: str = "postgres"
     POSTGRES_PORT: str = "5432"
+
+    OPENAI_API_KEY: str
 
     model_config = SettingsConfigDict(
         env_file=".env",

@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from backend.app.core.config import settings
-from backend.app.routes import auth, users
+from backend.app.routes import auth, chats, messages, users
 
 app = FastAPI(
     title=settings.PROJECT_NAME, version=settings.VERSION, description="RAI Bot API"
@@ -18,6 +18,8 @@ app.add_middleware(
 
 app.include_router(auth.router, prefix=settings.API_PREFIX)
 app.include_router(users.router, prefix=settings.API_PREFIX)
+app.include_router(chats.router, prefix=settings.API_PREFIX)
+app.include_router(messages.router, prefix=settings.API_PREFIX)
 
 
 @app.get("/")
