@@ -1,4 +1,5 @@
 from datetime import UTC, datetime, timedelta
+from uuid import UUID
 
 from jose import JWTError, jwt
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -17,12 +18,12 @@ class AuthService:
         self.user_service = UserService(session)
 
     @staticmethod
-    def create_access_token(email: str) -> str:
+    def create_access_token(email: str, user_id: UUID) -> str:
         """Create JWT access token."""
         expire = datetime.now(UTC) + timedelta(
             minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES
         )
-        to_encode = {"sub": email, "exp": expire}
+        to_encode = {"sub": email, "user_id": str(user_id), "exp": expire}
         encoded_jwt = jwt.encode(to_encode, settings.SECRET_KEY, algorithm="HS256")
 
         return encoded_jwt
@@ -45,11 +46,12 @@ class AuthService:
         try:
             payload = jwt.decode(token, settings.SECRET_KEY, algorithms=["HS256"])
             email = payload.get("sub")
+            user_id = payload.get("user_id")
 
-            if not email:
+            if not email or not user_id:
                 raise AuthenticationError("Could not validate credentials")
 
-            return TokenData(email=email)
+            return TokenData(email=email, user_id=UUID(user_id))
 
-        except JWTError:
+        except (JWTError, ValueError):
             raise AuthenticationError("Could not validate credentials")

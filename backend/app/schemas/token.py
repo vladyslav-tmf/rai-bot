@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from pydantic import BaseModel, ConfigDict
 
 
@@ -13,6 +15,7 @@ class Token(BaseModel):
 class TokenData(BaseModel):
     """Schema for token payload."""
 
-    email: str | None = None
+    email: str
+    user_id: UUID
 
     model_config = ConfigDict(from_attributes=True)

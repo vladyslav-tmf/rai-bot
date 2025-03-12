@@ -16,7 +16,7 @@ class MessageService:
 
     def __init__(self, session: AsyncSession) -> None:
         self.session = session
-        self.ai_service = AIService
+        self.ai_service = AIService()
         self.system_prompt = settings.SYSTEM_PROMPT
 
     async def create_user_message(

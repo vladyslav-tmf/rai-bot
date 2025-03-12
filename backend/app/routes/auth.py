@@ -33,10 +33,15 @@ async def login(
 ) -> Token:
     try:
         auth_service = AuthService(session)
+        user_service = UserService(session)
+
         await auth_service.authenticate_user(
             email=str(login_data.email), password=login_data.password
         )
-        access_token = auth_service.create_access_token(email=str(login_data.email))
+        user = await user_service.get_user_by_email(str(login_data.email))
+        access_token = auth_service.create_access_token(
+            email=str(login_data.email), user_id=user.id
+        )
 
         return Token(access_token=access_token)
 
