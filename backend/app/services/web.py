@@ -33,9 +33,10 @@ class WebService:
         """Check if URL is valid."""
         try:
             result = urlparse(url)
-            return all([result.scheme in ["http", "https"], result.netloc])
+            is_valid = all([result.scheme in ["http", "https"], result.netloc])
+            return is_valid
 
-        except ValueError:
+        except ValueError as error:
             return False
 
     async def get_webpage_content(self, url: str) -> str | None:
@@ -58,5 +59,5 @@ class WebService:
 
             return text
 
-        except httpx.HTTPError:
+        except httpx.HTTPError as error:
             return None

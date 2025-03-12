@@ -11,6 +11,7 @@ from openai.types.chat import ChatCompletion
 
 from backend.app.core.config import settings
 from backend.app.exceptions import AIServiceError
+from backend.app.models.message import MessageRole
 
 
 class AIService:
@@ -23,8 +24,19 @@ class AIService:
     async def get_response(self, messages: list[dict[str, str]]) -> str:
         """Get response from OpenAI API."""
         try:
+            formatted_messages = []
+
+            for msg in messages:
+                role = (
+                    msg["role"].value
+                    if isinstance(msg["role"], MessageRole)
+                    else msg["role"]
+                )
+                formatted_msg = {"role": role, "content": msg["content"]}
+                formatted_messages.append(formatted_msg)
+
             response: ChatCompletion = await self.client.chat.completions.create(
-                model=self.model, messages=messages
+                model=self.model, messages=formatted_messages
             )
             return response.choices[0].message.content or ""
 
@@ -46,12 +58,14 @@ class AIService:
         system_prompt: str, user_messages: list[dict[str, str]]
     ) -> list[dict[str, str]]:
         """Format chat history for OpenAI API."""
-        messages = [{"role": "system", "content": system_prompt}]
+        messages = [{"role": MessageRole.SYSTEM, "content": system_prompt}]
 
         for msg in user_messages:
-            messages.append({"role": "user", "content": msg["content"]})
+            messages.append({"role": MessageRole.USER, "content": msg["content"]})
 
             if msg.get("response"):
-                messages.append({"role": "assistant", "content": msg["response"]})
+                messages.append(
+                    {"role": MessageRole.ASSISTANT, "content": msg["response"]}
+                )
 
         return messages
