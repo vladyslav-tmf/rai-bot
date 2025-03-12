@@ -16,39 +16,40 @@
     <h1>Welcome to RAI Bot</h1>
 
     <div class="auth-tabs">
-      <button class="tab-btn active" data-tab="login">Login</button>
-      <button class="tab-btn" data-tab="register">Register</button>
+      <button id="login-tab" class="tab-button active">Login</button>
+      <button id="register-tab" class="tab-button">Register</button>
     </div>
 
-    <form id="login-form" class="auth-form active">
-      <div class="form-group">
-        <label for="login-email">Email</label>
-        <input type="email" id="login-email" required>
-      </div>
-      <div class="form-group">
-        <label for="login-password">Password</label>
-        <input type="password" id="login-password" required>
-      </div>
-      <button type="submit" class="auth-button">Login</button>
-    </form>
+    <div id="login-section" class="auth-section">
+      <form id="login-form">
+        <div class="form-group">
+          <input type="email" placeholder="Email" required>
+        </div>
+        <div class="form-group">
+          <input type="password" placeholder="Password" required>
+        </div>
+        <button type="submit" class="auth-button">Login</button>
+      </form>
+    </div>
 
-    <form id="register-form" class="auth-form">
-      <div class="form-group">
-        <label for="register-email">Email</label>
-        <input type="email" id="register-email" required>
-      </div>
-      <div class="form-group">
-        <label for="register-password">Password</label>
-        <input type="password" id="register-password" required>
-      </div>
-      <div class="form-group">
-        <label for="register-confirm-password">Confirm Password</label>
-        <input type="password" id="register-confirm-password" required>
-      </div>
-      <button type="submit" class="auth-button">Register</button>
-    </form>
+    <div id="register-section" class="auth-section" style="display: none;">
+      <form id="register-form">
+        <div class="form-group">
+          <input type="email" placeholder="Email" required>
+        </div>
+        <div class="form-group">
+          <input type="password" placeholder="Password" required>
+        </div>
+        <div class="form-group">
+          <input type="password" name="confirm-password" placeholder="Confirm Password"
+                 required>
+        </div>
+        <button type="submit" class="auth-button">Register</button>
+      </form>
+    </div>
   </div>
 </div>
+<script src="static/js/auth.js"></script>
 </body>
 
 </html>

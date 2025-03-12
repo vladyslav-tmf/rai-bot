@@ -81,7 +81,7 @@ class MessageService:
         query = await self.session.execute(
             select(Message)
             .where(Message.chat_id == chat_id)
-            .order_by(Message.created_at.desc())
+            .order_by(Message.created_at.asc())
             .offset(skip)
             .limit(limit)
         )

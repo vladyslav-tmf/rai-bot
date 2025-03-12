@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:8000';
+const API_URL = 'http://localhost:8000/api/v1';
 
 class ApiService {
     constructor() {
@@ -17,18 +17,13 @@ class ApiService {
                 headers
             });
 
+            const data = await response.json();
+
             if (!response.ok) {
-                if (response.status === 401) {
-                    localStorage.removeItem('token');
-                    window.location.href = '/login.html';
-                    return;
-                }
-                const error = new Error(`HTTP error! status: ${response.status}`);
-                error.status = response.status;
-                throw error;
+                throw new Error(data.detail || `HTTP error! status: ${response.status}`);
             }
 
-            return await response.json();
+            return data;
         } catch (error) {
             console.error('API request failed:', error);
             throw error;

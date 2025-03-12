@@ -6,29 +6,29 @@
   <meta name="viewport"
         content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>RAI Bot - AI Assistant</title>
-  <link rel="stylesheet" href="static/css/style.css">
+  <title>Chat - RAI Bot</title>
+  <link rel="stylesheet" href="static/css/chat.css">
 </head>
 
 <body>
-<div class="chat-container">
-  <div class="chat-header">
-    <h1>RAI Bot</h1>
+<div class="app-container">
+  <header class="app-header">
+    <button id="back-btn" class="back-button">&larr; Back</button>
+    <h1 id="chat-title">Chat</h1>
+  </header>
+
+  <div class="messages-container" id="messages-container">
   </div>
 
-  <div class="chat-messages" id="chat-messages">
-  </div>
-
-  <div class="chat-input-container">
-    <form id="chat-form">
-            <textarea id="message-input" placeholder="Type a message..."
-                      rows="1"></textarea>
-      <button type="submit">
-        <span>Send</span>
-      </button>
-    </form>
-  </div>
+  <form id="message-form" class="message-form">
+    <div class="input-container">
+      <textarea id="message-input" placeholder="Type your message..." rows="1"
+                required></textarea>
+      <button type="submit" class="send-button">Send</button>
+    </div>
+  </form>
 </div>
+<script src="static/js/chat.js"></script>
 </body>
 
 </html>

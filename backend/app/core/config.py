@@ -11,7 +11,12 @@ class Settings(BaseSettings):
     API_PREFIX: str = "/api/v1"
     SECRET_KEY: str = secrets.token_urlsafe(32)
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
-    BACKEND_CORS_ORIGINS: list[str] = ["http://localhost:8000"]
+    BACKEND_CORS_ORIGINS: list[str] = [
+        "http://localhost:8000",
+        "http://localhost:3000",
+        "http://127.0.0.1:8000",
+        "http://127.0.0.1:3000",
+    ]
 
     @classmethod
     @field_validator("BACKEND_CORS_ORIGINS", mode="before")
