@@ -36,7 +36,7 @@ class WebService:
             is_valid = all([result.scheme in ["http", "https"], result.netloc])
             return is_valid
 
-        except ValueError as error:
+        except ValueError:
             return False
 
     async def get_webpage_content(self, url: str) -> str | None:
@@ -59,5 +59,5 @@ class WebService:
 
             return text
 
-        except httpx.HTTPError as error:
+        except httpx.HTTPError:
             return None
