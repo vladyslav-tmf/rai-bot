@@ -9,6 +9,7 @@ from backend.app.models.chat import Chat
 from backend.app.models.message import Message, MessageRole
 from backend.app.schemas.message import MessageCreate
 from backend.app.services.ai import AIService
+from backend.app.services.web import WebService
 
 
 class MessageService:
@@ -105,8 +106,31 @@ class MessageService:
 
     async def get_ai_response(self, chat_id: UUID, user_message: str) -> str:
         """Get AI response for a message."""
+        web_content = ""
+
+        async with WebService() as web_service:
+            urls = web_service.extract_urls(user_message)
+
+            for url in urls:
+                content = await web_service.get_webpage_content(url)
+
+                if content:
+                    web_content += f"\nContent from {url}:\n{content}\n"
+
         history = await self.get_chat_history(chat_id)
         messages = self.ai_service.format_chat_history(self.system_prompt, history)
+
+        if web_content:
+            messages.append(
+                {
+                    "role": "system",
+                    "content": (
+                        "The following is the content from the webpage(s) "
+                        f"mentioned in the user's message:{web_content}"
+                    ),
+                }
+            )
+
         messages.append({"role": "user", "content": user_message})
 
         return await self.ai_service.get_response(messages)

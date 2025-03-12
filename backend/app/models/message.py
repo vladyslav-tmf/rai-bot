@@ -11,6 +11,7 @@ from backend.app.db.base import Base
 class MessageRole(str, Enum):
     USER = "user"
     ASSISTANT = "assistant"
+    SYSTEM = "system"
 
 
 class Message(Base):
