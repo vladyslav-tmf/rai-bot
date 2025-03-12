@@ -12,20 +12,31 @@ class ApiService {
         };
 
         try {
+            console.log('Making request:', {
+                url: `${API_URL}${endpoint}`,
+                method: options.method || 'GET',
+                headers,
+                body: options.body
+            });
+
             const response = await fetch(`${API_URL}${endpoint}`, {
                 ...options,
                 headers
             });
 
             const data = await response.json();
+            console.log('Response:', data);
 
             if (!response.ok) {
-                throw new Error(data.detail || `HTTP error! status: ${response.status}`);
+                const errorMessage = typeof data === 'object'
+                    ? JSON.stringify(data, null, 2)
+                    : data.detail || `HTTP error! status: ${response.status}`;
+                throw new Error(errorMessage);
             }
 
             return data;
         } catch (error) {
-            console.error('API request failed:', error);
+            console.error('API request failed:', error.message);
             throw error;
         }
     }
@@ -34,10 +45,12 @@ class ApiService {
         return this.request('/chats');
     }
 
-    async createChat() {
+    async createChat(title) {
         return this.request('/chats', {
             method: 'POST',
-            body: JSON.stringify({})
+            body: JSON.stringify({
+                title
+            })
         });
     }
 }
@@ -46,12 +59,53 @@ class ChatManager {
     constructor() {
         this.api = new ApiService();
         this.chatsList = document.getElementById('chats-list');
+        this.modal = document.getElementById('new-chat-modal');
+        this.newChatForm = document.getElementById('new-chat-form');
         this.setupEventListeners();
     }
 
     setupEventListeners() {
-        document.getElementById('new-chat-btn').addEventListener('click', () => this.createNewChat());
+        document.getElementById('new-chat-btn').addEventListener('click', () => this.showModal());
+        document.getElementById('cancel-chat-btn').addEventListener('click', () => this.hideModal());
         document.getElementById('logout-btn').addEventListener('click', () => this.logout());
+
+        this.newChatForm.addEventListener('submit', (e) => this.handleNewChat(e));
+
+        this.modal.addEventListener('click', (e) => {
+            if (e.target === this.modal) {
+                this.hideModal();
+            }
+        });
+    }
+
+    showModal() {
+        this.modal.classList.add('active');
+        document.getElementById('chat-title').focus();
+    }
+
+    hideModal() {
+        this.modal.classList.remove('active');
+        this.newChatForm.reset();
+    }
+
+    async handleNewChat(e) {
+        e.preventDefault();
+        const titleInput = document.getElementById('chat-title');
+        const title = titleInput.value.trim();
+
+        if (!title) return;
+
+        try {
+            const chat = await this.api.createChat(title);
+            this.hideModal();
+            window.location.href = `/chat.html?id=${chat.id}`;
+        } catch (error) {
+            console.error('Failed to create chat:', error);
+            const errorMessage = error.message.includes('validation error')
+                ? 'Failed to create chat: Invalid chat title'
+                : 'Failed to create chat. Please try again.';
+            alert(errorMessage);
+        }
     }
 
     async initialize() {
@@ -94,8 +148,7 @@ class ChatManager {
         const div = document.createElement('div');
         div.className = 'chat-item';
         div.innerHTML = `
-            <span class="chat-title">${chat.title || 'New Chat'}</span>
-            <span class="chat-date">${new Date(chat.timestamp).toLocaleDateString()}</span>
+            <span class="chat-title">${chat.title}</span>
         `;
 
         div.addEventListener('click', () => {
@@ -103,16 +156,6 @@ class ChatManager {
         });
 
         return div;
-    }
-
-    async createNewChat() {
-        try {
-            const chat = await this.api.createChat();
-            window.location.href = `/chat.html?id=${chat.id}`;
-        } catch (error) {
-            console.error('Failed to create chat:', error);
-            alert('Failed to create new chat. Please try again.');
-        }
     }
 
     logout() {

@@ -1,7 +1,7 @@
 from datetime import datetime
 from uuid import UUID
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 
 from backend.app.schemas.message import MessageInDB
 
@@ -9,7 +9,7 @@ from backend.app.schemas.message import MessageInDB
 class ChatBase(BaseModel):
     """Base schema for chat."""
 
-    title: str
+    title: str = Field(min_length=1, max_length=255, description="Title of the chat")
 
 
 class ChatCreate(ChatBase):
