@@ -4,7 +4,6 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from backend.app.core.config import Settings
 from backend.app.core.dependencies import get_current_user, get_db
 from backend.app.exceptions import AIServiceError
 from backend.app.schemas.message import MessageCreate, MessageInDB
@@ -18,12 +17,11 @@ router = APIRouter(prefix="/messages", tags=["messages"])
 async def create_message(
     message_data: MessageCreate,
     current_user: Annotated[TokenData, Depends(get_current_user)],
-    settings: Settings = Depends(Settings),
     session: AsyncSession = Depends(get_db),
 ) -> list[MessageInDB]:
     """Create a new message and get AI response."""
     try:
-        message_service = MessageService(session, settings)
+        message_service = MessageService(session)
 
         new_user_message = await message_service.create_user_message(
             message_data, current_user.user_id

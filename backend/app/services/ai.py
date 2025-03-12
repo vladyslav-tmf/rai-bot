@@ -9,14 +9,14 @@ from openai import (
 )
 from openai.types.chat import ChatCompletion
 
-from backend.app.core.config import Settings
+from backend.app.core.config import settings
 from backend.app.exceptions import AIServiceError
 
 
 class AIService:
     """Service for interacting with OpenAI API."""
 
-    def __init__(self, settings: Settings) -> None:
+    def __init__(self) -> None:
         self.client = AsyncOpenAI(api_key=settings.OPENAI_API_KEY)
         self.model = settings.OPENAI_MODEL
 

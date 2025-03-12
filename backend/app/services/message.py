@@ -4,7 +4,7 @@ from sqlalchemy import select
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from backend.app.core.config import Settings
+from backend.app.core.config import settings
 from backend.app.models.chat import Chat
 from backend.app.models.message import Message, MessageRole
 from backend.app.schemas.message import MessageCreate
@@ -14,9 +14,9 @@ from backend.app.services.ai import AIService
 class MessageService:
     """Service for handling message-related operations."""
 
-    def __init__(self, session: AsyncSession, settings: Settings) -> None:
+    def __init__(self, session: AsyncSession) -> None:
         self.session = session
-        self.ai_service = AIService(settings)
+        self.ai_service = AIService
         self.system_prompt = settings.SYSTEM_PROMPT
 
     async def create_user_message(

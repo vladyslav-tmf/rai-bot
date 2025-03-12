@@ -6,7 +6,7 @@ from sqlalchemy import pool
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
 
-from backend.app.core.config import Settings
+from backend.app.core.config import settings
 from backend.app.db.base import Base
 from backend.app.models.chat import Chat  # noqa
 from backend.app.models.message import Message  # noqa
@@ -31,8 +31,6 @@ target_metadata = Base.metadata
 # can be acquired:
 # my_important_option = config.get_main_option("my_important_option")
 # ... etc.
-
-settings = Settings()
 
 
 def get_url() -> str:
